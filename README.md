@@ -10,60 +10,63 @@
 [![Code Size](https://img.shields.io/github/languages/code-size/alhamrizvi-cloud/urlx)](https://github.com/alhamrizvi-cloud/urlx)
 [![Top Language](https://img.shields.io/github/languages/top/alhamrizvi-cloud/urlx)](https://github.com/alhamrizvi-cloud/urlx)
 
-**urlX** is a fast, extensible reconnaissance tool that aggregates URLs from **archives, certificate transparency logs, threat‑intel platforms, and code repositories**.
+## 🔍 Overview (Resume)
 
-Built for **bug bounty hunters**, **pentesters**, and **security researchers** who want **maximum URL coverage** with **minimal effort**.
+**urlX** is a high-performance reconnaissance tool designed for **bug bounty hunters**, **penetration testers**, and **security researchers**.
 
-## ✨ Key Features
+It combines:
 
-* 🔎 **11+ Data Sources** for deep URL discovery
-* ⚡ **Concurrent fetching** with configurable workers
-* 🧠 **Smart deduplication** across all sources
-* 📥 **Flexible input** — single domain or domain lists
-* 🔐 **Optional API keys** for enhanced coverage
-* 📤 **Stdout or file output** (tool‑chain friendly)
-* 🐞 **Verbose mode** for debugging & research
+* Passive URL discovery from **11+ intelligence sources**
+* **Live host probing** (DNS, TCP, TLS, HTTP)
+* **Active web crawling** for hidden endpoints
+* Smart **file & extension filtering**
+* Fast, concurrent processing using **Go routines**
 
-## 📡 Data Sources
+urlX helps you quickly discover **attack surface**, **hidden assets**, and **live endpoints** with minimal setup.
 
-### 🕰️ Historical & Archive
+> Built for speed, scale, and real-world recon workflows.
 
-* Wayback Machine (archive.org)
-* Archive.today (archive.is)
-* Common Crawl
+Created by **[Alham Rizvi](https://github.com/alhamrizvi-cloud)**
 
-### 🔐 Certificate Intelligence
+---
 
-* crt.sh (Certificate Transparency)
-* Censys
+## 🚀 Installation Guide
 
-### 🧠 Threat Intelligence
+### Requirements
 
-* AlienVault OTX
-* VirusTotal
-* ThreatCrowd
+* **Go 1.19 or higher**
+* Linux / macOS (Windows supported with Go environment)
+* Internet access for passive sources
 
-### 🌐 Security Platforms
-
-* URLScan.io
-* SecurityTrails
-
-### 🧑‍💻 Code & Secrets
-
-* GitHub (endpoint & URL discovery in public code)
-
-
-## 🚀 Installation
-
-### ✅ Using `go install` (Recommended)
+Verify Go installation:
 
 ```bash
-GOPROXY=direct go install github.com/alhamrizvi-cloud/urlx@latest
+go version
 ```
 
-Make sure `$GOPATH/bin` is in your `$PATH`.
+---
 
-### 🛠️ Build from Source
+### 🔹 Method 1: Go Install (Recommended)
+
+```bash
+go install github.com/alhamrizvi-cloud/urlx@latest
+```
+
+Make sure `$GOPATH/bin` is in your PATH:
+
+```bash
+export PATH=$PATH:$(go env GOPATH)/bin
+```
+
+Verify:
+
+```bash
+urlx -h
+```
+
+---
+
+### 🔹 Method 2: Build From Source
 
 ```bash
 git clone https://github.com/alhamrizvi-cloud/urlx.git
@@ -71,123 +74,84 @@ cd urlx
 go build -o urlx main.go
 ```
 
-## 📖 Usage
-
-### 🔹 Single Domain
+Move binary system-wide (optional):
 
 ```bash
-urlx -domain example.com
+sudo mv urlx /usr/local/bin/
 ```
 
-### 🔹 Multiple Domains (File)
+Verify:
 
 ```bash
-urlx -d domains.txt
+urlx -h
 ```
 
-### 🔹 Save Output
+---
+
+### 🔹 Method 3: Quick Install Script
 
 ```bash
-urlx -d domains.txt -o urls.txt
+curl -sSfL https://raw.githubusercontent.com/alhamrizvi-cloud/urlx/main/install.sh | sh
 ```
 
-### 🔹 Verbose Mode
+---
+
+### 🔹 Method 4: Docker
 
 ```bash
-urlx -domain example.com -v
-```
-## ⚙️ Advanced Usage
-
-### With API Keys (Maximum Coverage)
-
-```bash
-urlx -d subs.txt \
-  -urlscan-key YOUR_KEY \
-  -otx-key YOUR_KEY \
-  -vt-key YOUR_KEY \
-  -securitytrails-key YOUR_KEY \
-  -github-key YOUR_KEY \
-  -censys-id YOUR_ID \
-  -censys-secret YOUR_SECRET \
-  -o results.txt -v
+docker build -t urlx .
+docker run --rm urlx -h
 ```
 
-### Increase Concurrency
+---
 
-```bash
-urlx -d domains.txt -c 20
-```
+## 🔑 Optional API Keys (Enhance Results)
 
-## 🧰 Tool Chaining Examples
+urlX works **without API keys**, but adding them increases coverage and accuracy.
 
-### Bug Bounty Workflow
+Supported providers:
 
-```bash
-subfinder -d target.com -silent > subs.txt
-urlx -d subs.txt -o urls.txt
-httpx -l urls.txt -silent > live.txt
-nuclei -l live.txt
-```
+* URLScan.io
+* AlienVault OTX
+* VirusTotal
+* GitHub
+* Censys
+* SecurityTrails
 
-### FFUF
+Keys can be passed via CLI flags or environment variables.
 
-```bash
-urlx -domain target.com | ffuf -w - -u FUZZ
-```
-
-### Parameter Discovery
-
-```bash
-urlx -domain target.com | unfurl keys | sort -u
-```
-## 🏷️ Flags
-
-| Flag                  | Description       |
-| --------------------- | ----------------- |
-| `-d`                  | File with domains |
-| `-domain`             | Single domain     |
-| `-o`                  | Output file       |
-| `-v`                  | Verbose           |
-| `-c`                  | Concurrency       |
-| `-no-banner`          | Disable banner    |
-| `-urlscan-key`        | URLScan API       |
-| `-otx-key`            | AlienVault OTX    |
-| `-vt-key`             | VirusTotal        |
-| `-securitytrails-key` | SecurityTrails    |
-| `-github-key`         | GitHub Token      |
-| `-censys-id`          | Censys ID         |
-| `-censys-secret`      | Censys Secret     |
-
-## 🔑 API Notes
-
-* Most sources work **without keys**
-* API keys = **more URLs + higher rate limits**
-* Free tiers supported where available
+---
 
 ## ⚠️ Disclaimer
 
-This tool is for **authorized security testing and research only**.
-You are responsible for complying with laws and program rules.
+This tool is intended **only for authorized security testing and legal research**.
+
+You are responsible for ensuring you have **explicit permission** before scanning any target.
+
+**Misuse may be illegal.**
+
+---
+
+## 📄 License
+
+MIT License – see [LICENSE](LICENSE)
+
+---
 
 ## 🤝 Contributing
 
-Pull requests are welcome.
+Pull requests, feature ideas, and source additions are welcome.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-To add a new source, implement:
+---
 
-```go
-type URLSource interface {
-  Fetch(domain string) ([]string, error)
-  Name() string
-}
-```
+## ⭐ Support the Project
 
-## ⭐ Support
+If you find **urlX** useful, please consider giving it a ⭐ on GitHub.
 
-If this project helps you:
+👉 [https://github.com/alhamrizvi-cloud/urlx](https://github.com/alhamrizvi-cloud/urlx)
 
-* ⭐ Star the repo
-* 🐛 Report issues
-* 🔧 Submit PRs
+---
 
+**Built with ❤️ by Alham Rizvi**
 **Happy Hunting 🎯**
