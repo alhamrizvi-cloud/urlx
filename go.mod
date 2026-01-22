@@ -1,7 +1,5 @@
 module github.com/alhamrizvi-cloud/urlx
 
-go 1.19
+go 1.24.0
 
-require (
-	golang.org/x/net v0.20.0
-)
+require golang.org/x/net v0.49.0
